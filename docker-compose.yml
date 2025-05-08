@@ -29,3 +29,13 @@ services:
     restart: unless-stopped
     tty: true
     stdin_open: true
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: "rabbit"
+    container_name: "rabbit"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      REBBITMQ_DEFAULT_PASS: "guest"
