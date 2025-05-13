@@ -133,3 +133,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # celery
 CELERY_BROKER_URL = (f"amqp://{os.environ['RABBIT_MQ_USER']}:{os.environ['RABBIT_MQ_PASSWORD']}"
                      f"@{os.environ['RABBIT_MQ_HOST']}:{os.environ['RABBIT_MQ_PORT']}")
+# services
+HESHAROR_URL = os.environ["HESHATOR_URL"]
+TEXT_SAVER_URL = os.environ["TEXT_SAVER_URL"]
