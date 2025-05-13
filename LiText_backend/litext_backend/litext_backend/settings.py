@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "litext_login.apps.LitextLoginConfig",
     "litext_text.apps.LitextTextConfig",
 ]
