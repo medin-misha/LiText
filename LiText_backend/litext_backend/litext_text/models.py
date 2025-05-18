@@ -28,3 +28,7 @@ class TextBlock(models.Model):
     def delete(self, using=None, keep_parents=False):
         self.text_saver.delete_text(id=self.text)
         super().delete(using=using, keep_parents=keep_parents)
+
+    def get_text(self):
+        self.full_text = self.text_saver.get_text(text=self.text)
+        return self.full_text

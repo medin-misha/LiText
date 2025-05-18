@@ -12,3 +12,4 @@ class ListCreateTextBlockAPIView(ListCreateAPIView):
 class RetrieveUpdateDestroyTextBlockAPIView(RetrieveUpdateDestroyAPIView):
     queryset = TextBlock.objects.all()
     serializer_class = TextBlockSerializer
+

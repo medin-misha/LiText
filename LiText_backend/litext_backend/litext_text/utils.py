@@ -9,6 +9,12 @@ class TextSaver:
     url: str = settings.TEXT_SAVER_URL
     path: str = "/api/texts/"
 
+    def get_text(self, text: str) -> str:
+        response = requests.get(url=self.protocol + self.url + self.path + f"one/{text}")
+        if 200 <= response.status_code <= 300:
+            return  response.json()["body"]
+        raise Http404(response.json())
+
     def save_text(self, text: str, user_id: int) -> dict:
         create_text_data: dict = {
             "body": text,
