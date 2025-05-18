@@ -24,6 +24,8 @@ class TextBlock(models.Model):
         self.text = self.text_saver.save_text(text=self.text, user_id=1)["id"]
         super().save(*args, **kwargs)
 
+    def update(self, new_body: str) -> None:
+        self.text_saver.update_text(new_body=new_body, text=self.text)
 
     def delete(self, using=None, keep_parents=False):
         self.text_saver.delete_text(id=self.text)
