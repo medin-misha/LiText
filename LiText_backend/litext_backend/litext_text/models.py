@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from .utils import TextSaver
+from .utils import get_text, save_text, update_text, delete_text
 
 # Create your models here.
 """
@@ -18,19 +18,18 @@ class TextBlock(models.Model):
     text = models.CharField()
     timestamp = models.DateTimeField(auto_now_add=True)
     archive = models.BooleanField(default=False)
-    text_saver = TextSaver()
 
     def save(self, *args, **kwargs):
-        self.text = self.text_saver.save_text(text=self.text, user_id=1)["id"]
+        self.text = save_text(text=self.text, user_id=1)["id"]
         super().save(*args, **kwargs)
 
     def update(self, new_body: str) -> None:
-        self.text_saver.update_text(new_body=new_body, text=self.text)
+        update_text.delay(new_body=new_body, text=self.text)
 
     def delete(self, using=None, keep_parents=False):
-        self.text_saver.delete_text(id=self.text)
+        delete_text.delay(id=self.text)
         super().delete(using=using, keep_parents=keep_parents)
 
     def get_text(self):
-        self.full_text = self.text_saver.get_text(text=self.text)
+        self.full_text = get_text(text=self.text)
         return self.full_text
