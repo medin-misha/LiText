@@ -14,7 +14,7 @@ TextBlock
 
 
 class TextBlock(models.Model):
-    # user = models.ForeignKey(to=User, on_delete=models.CASCADE())
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     text = models.CharField()
     timestamp = models.DateTimeField(auto_now_add=True)
     archive = models.BooleanField(default=False)
