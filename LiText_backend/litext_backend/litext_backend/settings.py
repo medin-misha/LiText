@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework.authtoken",
     "litext_login.apps.LitextLoginConfig",
     "litext_text.apps.LitextTextConfig",
 ]
@@ -136,3 +137,10 @@ CELERY_BROKER_URL = (f"amqp://{os.environ['RABBIT_MQ_USER']}:{os.environ['RABBIT
 # services
 HESHAROR_URL = os.environ["HESHATOR_URL"]
 TEXT_SAVER_URL = os.environ["TEXT_SAVER_URL"]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
