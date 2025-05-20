@@ -27,7 +27,6 @@ class UpdateTextBlockSerializer(ModelSerializer):
         return instance.get_text()
 
     def update(self, instance: TextBlock, validated_data: dict):
-        print(validated_data)
         instance.update(new_body=validated_data["body"])
         return instance
     class Meta:
