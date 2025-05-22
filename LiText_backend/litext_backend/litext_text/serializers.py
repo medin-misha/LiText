@@ -17,7 +17,7 @@ class ReturnBlockSerializer(ModelSerializer):
 class CreateTextBlockSerializer(ModelSerializer):
     class Meta:
         model = TextBlock
-        fields = "text", "timestamp", "archive", "pk"
+        fields = "text", "timestamp", "archive", "pk", "user_id"
 
 
 class UpdateTextBlockSerializer(ModelSerializer):
