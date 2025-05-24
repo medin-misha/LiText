@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from .models import TextBlock
+from .models import TextBlock, TextBlockLink
 
 
 class ReturnBlockSerializer(ModelSerializer):
@@ -29,6 +29,21 @@ class UpdateTextBlockSerializer(ModelSerializer):
     def update(self, instance: TextBlock, validated_data: dict):
         instance.update(new_body=validated_data["body"])
         return instance
+
     class Meta:
         model = TextBlock
         fields = "body",
+
+
+class ReturnTextBlockLinkSerializer(ModelSerializer):
+    block = ReturnBlockSerializer(read_only=True)
+
+    class Meta:
+        model = TextBlockLink
+        fields = "pk", "block_id", "timestamp", "life_time", "link", "block"
+
+
+class CreateTextBlockLinkSerializer(ModelSerializer):
+    class Meta:
+        model = TextBlockLink
+        fields = "pk", "timestamp", "life_time", "link", "block"

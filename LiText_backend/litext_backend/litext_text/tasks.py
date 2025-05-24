@@ -21,3 +21,11 @@ def delete_text(id: str) -> None:
     if 200 <= response.status_code <= 300:
         return
     raise Http404(response.json())
+
+
+@shared_task
+def delete_hash(hash: str) -> None:
+    response = requests.delete(url=settings.HESHAROR_URL + "/api/v1/hash" + hash)
+    if 200 <= response.status_code <= 300:
+        return
+    raise Http404(response.json())

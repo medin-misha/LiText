@@ -1,11 +1,14 @@
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.mixins import status
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView
 from django.http import Http404
-from .models import TextBlock
-from .serializers import ReturnBlockSerializer, CreateTextBlockSerializer, UpdateTextBlockSerializer
+from .models import TextBlock, TextBlockLink
+from .serializers import ReturnBlockSerializer, CreateTextBlockSerializer, UpdateTextBlockSerializer, \
+    ReturnTextBlockLinkSerializer, CreateTextBlockLinkSerializer
 from .permissions import IsOwner
+
 
 class TextBlockListAPIView(ListCreateAPIView):
     queryset = TextBlock.objects.all()
@@ -38,3 +41,25 @@ class TextBlockDetailView(RetrieveUpdateDestroyAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.update(instance=model, validated_data=request.data)
         return Response(serializer.data)
+
+
+class TextBlockLinkListCreateAPIView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    queryset = TextBlockLink.objects.all()
+    serializer_class = CreateTextBlockLinkSerializer
+
+
+class TextBlockLinkDetailAPIView(RetrieveDestroyAPIView):
+    permission_classes = [AllowAny]
+    queryset = TextBlockLink.objects.select_related("block").all()
+    serializer_class = ReturnTextBlockLinkSerializer
+
+    def get(self, request: Request, link: str) -> Response:
+        link_instance = TextBlockLink.objects.select_related("block").get(link=link)
+        serializer = ReturnTextBlockLinkSerializer(instance=link_instance)
+        return Response(serializer.data)
+
+    def delete(self, request, link: str) -> Response:
+        link_instance = TextBlockLink.objects.get(link=link)
+        link_instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
