@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .utils import get_text, save_text, get_hash
-from .tasks import update_text, delete_text, delete_hash
+from .tasks import delete_hash, update_text, delete_text
 
 # Create your models here.
 """

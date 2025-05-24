@@ -4,6 +4,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView
 from django.http import Http404
+from django.utils import timezone
 from .models import TextBlock, TextBlockLink
 from .serializers import ReturnBlockSerializer, CreateTextBlockSerializer, UpdateTextBlockSerializer, \
     ReturnTextBlockLinkSerializer, CreateTextBlockLinkSerializer
@@ -55,11 +56,27 @@ class TextBlockLinkDetailAPIView(RetrieveDestroyAPIView):
     serializer_class = ReturnTextBlockLinkSerializer
 
     def get(self, request: Request, link: str) -> Response:
-        link_instance = TextBlockLink.objects.select_related("block").get(link=link)
-        serializer = ReturnTextBlockLinkSerializer(instance=link_instance)
-        return Response(serializer.data)
+        instance = self.get_text_block_link_or_404(link=link)
+        serializer = ReturnTextBlockLinkSerializer(instance=instance)
+        return self.check_text_block_link_life_time(serializer=serializer)
 
     def delete(self, request, link: str) -> Response:
         link_instance = TextBlockLink.objects.get(link=link)
         link_instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_text_block_link_or_404(self, link: str) -> TextBlockLink:
+        try:
+            return TextBlockLink.objects.select_related("block").get(link=link)
+
+        except TextBlockLink.DoesNotExist:
+            raise Http404
+
+    def check_text_block_link_life_time(self, serializer: ReturnTextBlockLinkSerializer) -> Response:
+        if serializer.instance.life_time is None:
+            return Response(serializer.data)
+        model_life_seconds = (timezone.now() - serializer.instance.timestamp).total_seconds()
+        if model_life_seconds > serializer.instance.life_time:
+            serializer.instance.delete()
+            raise Http404()
+        return Response(serializer.data)

@@ -44,7 +44,11 @@ services:
       context: LiText_backend/
       dockerfile: ./CeleryDockerfile
     command: uv run celery -A litext_backend worker -l INFO
-
+  celery-beat:
+    build:
+      context: LiText_backend/
+      dockerfile: ./CeleryDockerfile
+    command: uv run celery -A litext_backend beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
   ### hesher
   hasher_redis:
       image: redis/redis-stack

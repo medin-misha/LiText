@@ -1,5 +1,5 @@
 from django.core.exceptions import BadRequest
-from celery import shared_task
+from .tasks import update_text, delete_text, delete_hash
 from django.http import Http404
 from django.conf import settings
 import requests
