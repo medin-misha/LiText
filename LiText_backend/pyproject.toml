@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "celery[rabbitmq]>=5.5.2",
     "django>=5.2.1",
+    "django-celery-beat>=2.8.1",
     "djangorestframework>=3.16.0",
     "psycopg2-binary>=2.9.10",
     "python-dotenv>=1.1.0",
